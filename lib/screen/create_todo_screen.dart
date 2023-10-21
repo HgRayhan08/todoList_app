@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CreateTodoScreen extends StatelessWidget {
+  static const routeName = "/CreateTodoScreen";
   const CreateTodoScreen({super.key});
 
   @override

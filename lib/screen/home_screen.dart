@@ -5,6 +5,7 @@ import 'package:todo_list/widgets/listTile_widgets.dart';
 
 // ignore: must_be_immutable
 class HomeScreen extends StatelessWidget {
+  static const routeName = "/HomeScreen";
   HomeScreen({super.key});
 
   DateTime dayNow = DateTime.now();
@@ -44,15 +45,9 @@ class HomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    nowDay,
-                    style: const TextStyle(
-                        fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    nowDate,
-                    style: const TextStyle(fontSize: 18),
-                  ),
+                  Text(nowDay, style: Theme.of(context).textTheme.displayLarge),
+                  Text(nowDate,
+                      style: Theme.of(context).textTheme.displaySmall),
                 ],
               ),
             )),
@@ -68,11 +63,7 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const CreateTodoScreen(),
-            ),
-          );
+          Navigator.of(context).pushNamed(CreateTodoScreen.routeName);
         },
         child: const Icon(Icons.add),
       ),

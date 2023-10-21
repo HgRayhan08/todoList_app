@@ -15,19 +15,23 @@ class ListTileWidgets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: ListTile(
-        title: Text(judul),
-        subtitle: Text(subJudul),
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => DetailTodoScreen(
-              judul: judul,
-            ),
-          ));
-        },
+    final mediaQueryWidth = MediaQuery.of(context).size.width;
+    return ListTile(
+      contentPadding: EdgeInsets.only(left: mediaQueryWidth * 0.1),
+      title: Text(
+        judul,
+        style: Theme.of(context).textTheme.displayMedium,
       ),
+      subtitle: Text(
+        subJudul,
+        style: Theme.of(context).textTheme.displaySmall,
+      ),
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          DetailTodoScreen.routeName,
+          arguments: judul,
+        );
+      },
     );
   }
 }
