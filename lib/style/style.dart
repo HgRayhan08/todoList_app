@@ -6,7 +6,7 @@ final TextTheme myTextTheme = TextTheme(
       fontSize: 35,
       fontWeight: FontWeight.bold,
     ),
-    displayMedium: GoogleFonts.lato(
+    displayMedium: GoogleFonts.tiltNeon(
       fontSize: 20,
       fontWeight: FontWeight.bold,
     ),

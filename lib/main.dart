@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       routes: {
         HomeScreen.routeName: (context) => HomeScreen(),
         DetailTodoScreen.routeName: (context) => const DetailTodoScreen(),
-        CreateTodoScreen.routeName: (context) => const CreateTodoScreen(),
+        CreateTodoScreen.routeName: (context) => CreateTodoScreen(),
       },
     );
   }
