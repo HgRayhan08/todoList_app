@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_list/model/todo_model.dart';
+import 'package:todo_list/service/db/database_helper.dart';
 import 'package:todo_list/widgets/card_day.dart';
 import 'package:todo_list/widgets/textFormField_widgets.dart';
+import 'package:uuid/uuid.dart';
 
 // ignore: must_be_immutable
 class CreateTodoScreen extends StatelessWidget {
@@ -22,6 +25,11 @@ class CreateTodoScreen extends StatelessWidget {
     final String formatDate = format.format(now);
     return formatDate;
   }
+
+  TextEditingController judulTodo = TextEditingController();
+  TextEditingController deskripsi = TextEditingController();
+
+  var uuid = Uuid();
 
   @override
   Widget build(BuildContext context) {
@@ -56,17 +64,35 @@ class CreateTodoScreen extends StatelessWidget {
           ),
           TextFormFieldWidgets(
             maxlines: 1,
+            hintText: "judul",
+            controller: judulTodo,
           ),
           const SizedBox(
             height: 30,
           ),
           TextFormFieldWidgets(
             maxlines: 10,
+            hintText: "deskripsi",
+            controller: deskripsi,
           ),
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                if (judulTodo.text == "" || deskripsi.text == "") {
+                  print("gagal");
+                } else {
+                  // print("berhasil");
+                  DataBaseHelper().insertTodo(
+                    TodoList(
+                      id: uuid.v4(),
+                      tanggal: nowDate,
+                      judul: judulTodo.text,
+                      todo: deskripsi.text,
+                    ),
+                  );
+                }
+              },
               child: Text(
                 "Submit",
                 style: Theme.of(context).textTheme.displaySmall!.copyWith(
