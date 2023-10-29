@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
 
 class DialogWidgets extends StatelessWidget {
-  String textFirst;
-  Function() onpresedFirst;
-  Function() onpresedsecond;
-  String textSecond;
-  DialogWidgets(
-      {super.key,
-      required this.textFirst,
-      required this.onpresedFirst,
-      required this.textSecond,
-      required this.onpresedsecond});
+  final String textFirst;
+  final Function() onpresedFirst;
+  final Function() onpresedsecond;
+  final String textSecond;
+  const DialogWidgets({
+    super.key,
+    required this.textFirst,
+    required this.onpresedFirst,
+    required this.textSecond,
+    required this.onpresedsecond,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Apakah yakin dihapus"),
+      title: const Text("Apakah yakin dihapus"),
       actions: [
         TextButton(
-          onPressed: () {
-            onpresedFirst;
-          },
+          onPressed: onpresedFirst,
           child: Text(textFirst),
         ),
         TextButton(
-          onPressed: () {
-            onpresedsecond;
-          },
+          onPressed: onpresedsecond,
           child: Text(textSecond),
         )
       ],

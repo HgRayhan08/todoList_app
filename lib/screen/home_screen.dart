@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_list/provider/database_provider.dart';
 import 'package:todo_list/screen/create_todo_screen.dart';
-import 'package:todo_list/service/db/database_helper.dart';
+import 'package:todo_list/utils/result_state_data.dart';
 import 'package:todo_list/widgets/listTile_widgets.dart';
 
-// ignore: must_be_immutable
 class HomeScreen extends StatefulWidget {
   static const routeName = "/HomeScreen";
-  HomeScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -59,34 +60,32 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: FutureBuilder(
-        future: DataBaseHelper().getListTodo(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            var data = snapshot.data;
-            return RefreshIndicator(
-              onRefresh: () {
-                setState(() {});
-                return DataBaseHelper().getListTodo();
+      body: Consumer<DatabaseProvider>(
+        builder: (context, value, child) {
+          if (value.resulstatedata == ResultStateData.hasData) {
+            return ListView.builder(
+              itemCount: value.todolist.length,
+              itemBuilder: (context, index) {
+                var data = value.todolist[index];
+                return ListTileWidgets(
+                  id: data.id ?? "",
+                  judul: data.judul ?? "",
+                  subJudul: data.todo ?? "",
+                );
               },
-              child: ListView.builder(
-                itemCount: data?.length,
-                itemBuilder: (context, index) {
-                  return ListTileWidgets(
-                    id: data?[index].id ?? "",
-                    judul: data?[index].judul ?? "",
-                    subJudul: data?[index].todo ?? "",
-                  );
-                },
-              ),
+            );
+          } else {
+            return const Center(
+              child: Text("data kosng"),
             );
           }
-          return const Center(child: CircularProgressIndicator());
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).pushNamed(CreateTodoScreen.routeName);
+        onPressed: () async {
+          await Navigator.of(context).pushNamed(
+            CreateTodoScreen.routeName,
+          );
         },
         child: const Icon(Icons.add),
       ),

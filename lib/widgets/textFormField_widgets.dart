@@ -1,11 +1,12 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class TextFormFieldWidgets extends StatelessWidget {
-  int maxlines;
-  String hintText;
-  TextEditingController controller;
-  TextFormFieldWidgets(
+  final int maxlines;
+  final String hintText;
+  final TextEditingController controller;
+  const TextFormFieldWidgets(
       {super.key,
       required this.hintText,
       required this.controller,
@@ -27,7 +28,7 @@ class TextFormFieldWidgets extends StatelessWidget {
             ),
           ),
         ),
-        border: OutlineInputBorder(
+        border: const OutlineInputBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(20),
           ),

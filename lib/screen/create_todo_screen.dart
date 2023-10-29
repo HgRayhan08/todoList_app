@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_list/model/todo_model.dart';
-import 'package:todo_list/service/db/database_helper.dart';
+import 'package:todo_list/provider/database_provider.dart';
+import 'package:todo_list/utils/result_state_data.dart';
 import 'package:todo_list/widgets/card_day.dart';
 import 'package:todo_list/widgets/textFormField_widgets.dart';
 import 'package:uuid/uuid.dart';
@@ -29,7 +31,7 @@ class CreateTodoScreen extends StatelessWidget {
   TextEditingController judulTodo = TextEditingController();
   TextEditingController deskripsi = TextEditingController();
 
-  var uuid = Uuid();
+  var uuid = const Uuid();
 
   @override
   Widget build(BuildContext context) {
@@ -40,69 +42,86 @@ class CreateTodoScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("data"),
       ),
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: mediaQuery * 0.07),
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.end,
+      body: Consumer<DatabaseProvider>(
+        builder: (context, provider, child) {
+          if (provider.resulstatedata == ResultStateData.hasData) {
+            return ListView(
+              padding: EdgeInsets.symmetric(horizontal: mediaQuery * 0.07),
               children: [
-                CardDay(
-                  content: nowDay,
-                  width: 0.4,
-                  fontSize: 35,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      CardDay(
+                        content: nowDay,
+                        width: 0.4,
+                        fontSize: 35,
+                      ),
+                      CardDay(
+                        content: nowDate,
+                        width: 0.3,
+                        fontSize: 18,
+                      ),
+                    ],
+                  ),
                 ),
-                CardDay(
-                  content: nowDate,
-                  width: 0.3,
-                  fontSize: 18,
+                TextFormFieldWidgets(
+                  maxlines: 1,
+                  hintText: "judul",
+                  controller: judulTodo,
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                TextFormFieldWidgets(
+                  maxlines: 10,
+                  hintText: "deskripsi",
+                  controller: deskripsi,
+                ),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () {
+                      if (judulTodo.text == "" || deskripsi.text == "") {
+                        print("gagal");
+                      } else {
+                        provider.addTodo(
+                          TodoList(
+                            id: uuid.v4(),
+                            tanggal: nowDate,
+                            judul: judulTodo.text,
+                            todo: deskripsi.text,
+                          ),
+                        );
+                        // DataBaseHelper().insertTodo(
+                        //   TodoList(
+                        //     id: uuid.v4(),
+                        //     tanggal: nowDate,
+                        //     judul: judulTodo.text,
+                        //     todo: deskripsi.text,
+                        //   ),
+                        // );
+                      }
+                    },
+                    child: Text(
+                      "Submit",
+                      style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
                 ),
               ],
-            ),
-          ),
-          TextFormFieldWidgets(
-            maxlines: 1,
-            hintText: "judul",
-            controller: judulTodo,
-          ),
-          const SizedBox(
-            height: 30,
-          ),
-          TextFormFieldWidgets(
-            maxlines: 10,
-            hintText: "deskripsi",
-            controller: deskripsi,
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: TextButton(
-              onPressed: () {
-                if (judulTodo.text == "" || deskripsi.text == "") {
-                  print("gagal");
-                } else {
-                  // print("berhasil");
-                  DataBaseHelper().insertTodo(
-                    TodoList(
-                      id: uuid.v4(),
-                      tanggal: nowDate,
-                      judul: judulTodo.text,
-                      todo: deskripsi.text,
-                    ),
-                  );
-                }
-              },
-              child: Text(
-                "Submit",
-                style: Theme.of(context).textTheme.displaySmall!.copyWith(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-            ),
-          ),
-        ],
+            );
+          } else {
+            return const Center(
+              child: Text("data Kosong"),
+            );
+          }
+        },
       ),
     );
   }
