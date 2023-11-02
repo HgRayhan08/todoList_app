@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_list/model/todo_model.dart';
 import 'package:todo_list/service/db/database_helper.dart';
 import 'package:todo_list/utils/result_state_data.dart';
+import 'package:uuid/uuid.dart';
 
 class DatabaseProvider extends ChangeNotifier {
   late DataBaseHelper dataBaseHelper;
@@ -13,11 +15,31 @@ class DatabaseProvider extends ChangeNotifier {
   List<TodoList> _todolist = [];
   List<TodoList> get todolist => _todolist;
 
-  late ResultStateData _resultStateData;
-  ResultStateData get resulstatedata => _resultStateData;
+  ResultStateData? _resultStateData;
+  ResultStateData? get resulstatedata => _resultStateData;
 
-  String _message = "";
-  String get message => _message;
+  String? _message = "";
+  String? get message => _message;
+
+  final DateTime _dayNow = DateTime.now();
+  DateTime get dayNow => _dayNow;
+
+  final _uuid = const Uuid();
+  get uuid => _uuid;
+
+  // memanggil hari
+  String getDay(DateTime now) {
+    final DateFormat format = DateFormat("EEEE");
+    final String formatday = format.format(now);
+    return formatday;
+  }
+
+  // Mengambil tanggal
+  String getdate(DateTime now) {
+    final DateFormat format = DateFormat("M/d/y");
+    final String formatDate = format.format(now);
+    return formatDate;
+  }
 
   void _getTodoList() async {
     _todolist = await dataBaseHelper.getListTodo();
@@ -33,6 +55,7 @@ class DatabaseProvider extends ChangeNotifier {
   void addTodo(TodoList todolist) async {
     try {
       await dataBaseHelper.insertTodo(todolist);
+
       _getTodoList();
     } catch (e) {
       _resultStateData = ResultStateData.error;

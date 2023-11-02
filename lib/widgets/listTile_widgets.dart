@@ -46,32 +46,33 @@ class ListTileWidgets extends StatelessWidget {
                     ),
                   );
                 },
-                icon: Icons.abc,
+                icon: Icons.delete,
                 autoClose: true,
-                backgroundColor: Colors.amber,
-                foregroundColor: Colors.green,
+                foregroundColor: Colors.red,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(20),
                 ),
-              )
+              ),
             ],
           ),
-          child: ListTile(
-            contentPadding: EdgeInsets.only(left: mediaQueryWidth * 0.1),
-            title: Text(
-              judul,
-              style: Theme.of(context).textTheme.displayMedium,
+          child: Material(
+            child: ListTile(
+              contentPadding: EdgeInsets.only(left: mediaQueryWidth * 0.1),
+              title: Text(
+                judul,
+                style: Theme.of(context).textTheme.displayMedium,
+              ),
+              subtitle: Text(
+                subJudul,
+                style: Theme.of(context).textTheme.displaySmall,
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed(
+                  DetailTodoScreen.routeName,
+                  arguments: judul,
+                );
+              },
             ),
-            subtitle: Text(
-              subJudul,
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
-            onTap: () {
-              Navigator.of(context).pushNamed(
-                DetailTodoScreen.routeName,
-                arguments: judul,
-              );
-            },
           ),
         );
       },
